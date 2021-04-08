@@ -1,3 +1,4 @@
+const { count } = require("console");
 var esprima = require("esprima");
 var options = {tokens:true, tolerant: true, loc: true, range: true };
 var fs = require("fs");
@@ -124,6 +125,11 @@ function complexity(filePath)
 			builder.ParameterCount = parameterCount(node);
 
 			builders[builder.FunctionName] = builder;
+		}
+
+		else if (node.type === 'Literal')
+		{
+			fileBuilder.Strings++;
 		}
 
 	});
