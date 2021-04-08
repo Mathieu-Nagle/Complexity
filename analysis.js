@@ -121,6 +121,7 @@ function complexity(filePath)
 
 			builder.FunctionName = functionName(node);
 			builder.StartLine    = node.loc.start.line;
+			builder.ParameterCount = parameterCount(node);
 
 			builders[builder.FunctionName] = builder;
 		}
@@ -168,6 +169,11 @@ function functionName( node )
 		return node.id.name;
 	}
 	return "anon function @" + node.loc.start.line;
+}
+
+function parameterCount( node )
+{
+	return node.params.length;
 }
 
 // Helper function for allowing parameterized formatting of strings.
