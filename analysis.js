@@ -124,6 +124,13 @@ function complexity(filePath)
 			builder.StartLine    = node.loc.start.line;
 			builder.ParameterCount = parameterCount(node);
 
+			traverseWithParents(node, function (node)
+			{
+				if (isDecision(node))
+				{
+				builder.SimpleCyclomaticComplexity++;
+				}
+			});
 			builders[builder.FunctionName] = builder;
 		}
 
@@ -131,6 +138,8 @@ function complexity(filePath)
 		{
 			fileBuilder.Strings++;
 		}
+
+		
 
 	});
 
