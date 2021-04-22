@@ -1,3 +1,4 @@
+const { count } = require("console");
 var esprima = require("esprima");
 var options = {tokens:true, tolerant: true, loc: true, range: true };
 var fs = require("fs");
@@ -33,9 +34,9 @@ function FunctionBuilder()
 	this.StartLine = 0;
 	this.FunctionName = "";
 	// The number of parameters for functions
-	this.ParameterCount  = 0,
+	this.ParameterCount  = 0;
 	// Number of if statements/loops + 1
-	this.SimpleCyclomaticComplexity = 0;
+	this.SimpleCyclomaticComplexity = 1;
 	// The max depth of scopes (nested ifs, loops, etc)
 	this.MaxNestingDepth    = 0;
 	// The max number of conditions if one decision statement.
@@ -121,9 +122,36 @@ function complexity(filePath)
 
 			builder.FunctionName = functionName(node);
 			builder.StartLine    = node.loc.start.line;
+			builder.ParameterCount = parameterCount(node);
 
+			traverseWithParents(node, function (node)
+			{
+				if (isDecision(node))
+				{
+					builder.SimpleCyclomaticComplexity++;
+					var count = 0;
+					traverseWithParents(node, function (node)
+					{
+						if((node.type === "LogicalExpression")&&((node.operator === '||') || (node.operator === '&&')))
+						{
+							count++;
+							if(builder.MaxConditions < count)
+							{
+								builder.MaxConditions = count;
+							}
+						}
+					});
+				}
+			});
 			builders[builder.FunctionName] = builder;
 		}
+
+		else if (node.type === 'Literal')
+		{
+			fileBuilder.Strings++;
+		}
+
+		
 
 	});
 
@@ -168,6 +196,11 @@ function functionName( node )
 		return node.id.name;
 	}
 	return "anon function @" + node.loc.start.line;
+}
+
+function parameterCount( node )
+{
+	return node.params.length;
 }
 
 // Helper function for allowing parameterized formatting of strings.
