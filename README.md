@@ -1,3 +1,9 @@
+# Results
+#### Travis testing status: ![](https://travis-ci.com/Mathieu-Nagle/Complexity.svg?branch=master)
+
+#### Screen shot of successful tests:
+![Successful test cases](Successful_test_cases.PNG)
+
 # Complexity & Travis-CI Lab
 
 In this lab, you'll be implementing simple algorithms for checking basic properties of code complexity, and working with Travis-CI for Continuous Integration.
