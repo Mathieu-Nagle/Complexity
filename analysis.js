@@ -1,4 +1,5 @@
 const { count } = require("console");
+const { FILE } = require("dns");
 var esprima = require("esprima");
 var options = {tokens:true, tolerant: true, loc: true, range: true };
 var fs = require("fs");
@@ -9,7 +10,7 @@ function main()
 
 	if( args.length == 0 )
 	{
-		args = ["analysis.js"];
+		args = ["mystery.js"];
 	}
 	var filePath = args[0];
 	
@@ -77,6 +78,13 @@ function FileBuilder()
 			  "ImportCount {1}\t" +
 			  "Strings {2}\n"
 			).format( this.FileName, this.ImportCount, this.Strings ));
+	}
+}
+
+function getStrings(){
+	for( var node in builders )
+	{
+		return builders[node].Strings;
 	}
 }
 
@@ -309,3 +317,5 @@ mints.toString().split(".")[0] + " " + szmin;
       }
   }
  exports.complexity = complexity;
+ exports.getStrings = getStrings;
+
